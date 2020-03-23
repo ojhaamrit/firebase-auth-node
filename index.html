@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <title>Game Guidez</title>
+</head>
+<body class="grey lighten-3">
+
+    <!-- nav bar -->
+    <nav class="z-depth-0 grey lighten-4">
+        <div class="nav-wrapper container">
+            <a href="#" class="brand-logo">
+            <img src="img/#" alt="logo">
+            </a>
+
+            <u id="nav-mobile" class="right hide-on-med-and-down">
+                <li class="logged-in">
+                    <a href="#" class="grey-text modal-trigger" data-target="modal-account">Account</a>
+                </li>
+                <li class="logged-in">
+                    <a href="#" class="grey-text">Logout</a>
+                </li>
+                <li class="logged-in">
+                    <a href="#" class="grey-text modal-trigger" data-target="modal-create">Create Guide</a>
+                </li>
+                <li class="logged-out">
+                    <a href="#" class="grey-text modal-trigger" data-target="modal-login">Login</a>
+                </li>
+                <li class="logged-out">
+                    <a href="#" class="grey-text modal-trigger" data-target="modal-signup">Sign up</a>
+                </li>
+            </u>
+        </div>
+    </nav>
+
+
+
+
+
+
+
+
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-firestore.js"></script>
+    
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyAkuYgmzd6AniNm5uw9KGUSIriPzfNeuLg",
+            authDomain: "game-guidez-7744b.firebaseapp.com",
+            databaseURL: "https://game-guidez-7744b.firebaseio.com",
+            projectId: "game-guidez-7744b",
+            storageBucket: "game-guidez-7744b.appspot.com",
+            messagingSenderId: "809322855302",
+            appId: "1:809322855302:web:38fde927620f23dff58a07",
+            measurementId: "G-RS74S0JLQ5"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+
+        // make auth and firestore references.
+        const auth = firebase.auth(); //authentication
+        const db = firebase.firestore(); //databases
+
+        //update firestore settings.
+        db.settings({timestampsInSnapshots:true})
+    </script>
+
+    <script src="scripts/auth.js"></script>
+    <script src="scripts/index.js"></script>
+    
+</body>
+</html>
