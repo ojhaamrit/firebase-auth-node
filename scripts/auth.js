@@ -1,63 +1,86 @@
-// get data
-db.collection('guides').get().then(snapshot => {
-    setupGuides(snapshot.docs)
-})
-
-
-// listen for auth status changes.
+// LISTEN FOR AUTH STATUS CHANGED
 auth.onAuthStateChanged(user => {
     if (user) {
-        console.log("user logged in");
-    }else{
-        console.log("user logged out");
+        console.log('user logged in', user)
+        // if user logged in then GET DATA
+        db.collection('guides').onSnapshot(snapshot => {
+            setupGuides(snapshot.docs);
+            setupUI(user);
+        }, err => {
+            console.log(err.message)
+        });
+    } else {
+        console.log('user logged out')
+        // pass the empty array
+        setupUI();
+        setupGuides([]);
     }
-})
+});
 
 
-// SIGN UP
-const signupForm = document.querySelector("#signup-form");
-signupForm.addEventListener('submit', (e) => {
+// CREATE NEW GUIDE
+const createGuide = document.querySelector('#create-form');
+createGuide.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    // get form data
+    db.collection('guides').add({
+        title: createGuide['title'].value,
+        content: createGuide['content'].value
+    }).then(() => {
+        // close the modal and reset form
+        const modal = document.querySelector('#modal-create');
+        M.Modal.getInstance(modal).close();
+        createGuide.reset();
+    }).catch(err => {
+        console.log(err.message)
+    })
+})
+
+// SIGN UP FORM
+const signupForm = document.querySelector('#signup-form');
+signupForm.addEventListener('submit', (e) => {
+    e.preventDefault()
+
+    // get user info
     const email = signupForm['signup-email'].value;
     const password = signupForm['signup-password'].value;
 
-    // signup the user
+    // sign up the user & add firestore data
     auth.createUserWithEmailAndPassword(email, password).then(cred => {
-        console.log(cred.user);
-        // close the signup modal and reset the form
+        return db.collection('users').doc(cred.user.uid).set({
+            bio: signupForm['signup-bio'].value
+        });
+    }).then(() => {
+        // close the signup modal & reset form
         const modal = document.querySelector('#modal-signup');
-        M.modal.getInstance(modal).close();
+        M.Modal.getInstance(modal).close();
         signupForm.reset();
     });
 });
 
 
-// logout
+// LOGOUT
 const logout = document.querySelector('#logout');
 logout.addEventListener('click', (e) => {
-    e.preventDefault();
-    auth.signOut().then(() => {
-        console.log('user signed out');
-    });
+    e.preventDefault()
+    auth.signOut();
 });
 
 
-// LOGIN
-const loginForm = document.querySelector("#login-form");
-loginForm.addEventListener('submit', (e) => {
-    e.preventDefault();
+// LOGIN FORM
+const loginForm = document.querySelector('#login-form');
+loginForm.addEventListener('login', (e) => {
+    e.preventDefault()
 
     // get user info
     const email = loginForm['login-email'].value;
     const password = loginForm['login-password'].value;
 
+    // log the user in
     auth.signInWithEmailAndPassword(email, password).then(cred => {
-        console.log(cred.user);
-        // close the login modal and reset the from
-        const modal = document.querySelector('#modal-login');
-        M.modal.getInstance(modal).close();
+        // close the login form and rest the form
+        const modal = document.querySelector("#modal-login");
+        M.Modal.getInstance(modal).close();
         loginForm.reset();
     });
 });
